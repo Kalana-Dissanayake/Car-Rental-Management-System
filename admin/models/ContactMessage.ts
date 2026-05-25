@@ -9,6 +9,7 @@ export interface IContactMessage extends Document {
   returnDate: string;
   message: string;
   status: 'new' | 'read' | 'resolved';
+  customerId?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -61,6 +62,11 @@ const ContactMessageSchema = new Schema<IContactMessage>(
       type: String,
       enum: ['new', 'read', 'resolved'],
       default: 'new',
+    },
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Customer',
+      default: null,
     },
   },
   {

@@ -70,6 +70,8 @@ const ContactSchema = z.object({
     .min(1, 'Return date is required')
     .refine((date) => !isNaN(Date.parse(date)), 'Invalid return date'),
   message: z.string().max(1000, 'Message too long').optional().default(''),
+  // Optional: links the booking to a logged-in customer account
+  customerId: z.string().optional(),
 });
 
 // ─── POST /api/messages (Public — from website) ───────────────────────────
@@ -102,7 +104,11 @@ export async function POST(req: NextRequest) {
 
     await connectDB();
 
-    const newMessage = await ContactMessage.create(result.data);
+    // Build document — include customerId only when provided
+    const docData: Record<string, unknown> = { ...result.data };
+    if (!docData.customerId) delete docData.customerId;
+
+    const newMessage = await ContactMessage.create(docData);
 
     const response = NextResponse.json(
       {

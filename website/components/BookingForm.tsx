@@ -3,8 +3,9 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
-  User, Mail, Phone, Car, Calendar, MessageSquare, CheckCircle, AlertCircle, Loader2
+  User, Mail, Phone, Car, Calendar, MessageSquare, CheckCircle, AlertCircle, Loader2, LogIn
 } from 'lucide-react';
+import { useCustomer } from '@/app/context/AuthContext';
 
 type FormData = {
   fullName: string;
@@ -57,6 +58,7 @@ function validateForm(data: FormData): FormErrors {
 export default function BookingForm() {
   const searchParams = useSearchParams();
   const preselectedVehicle = searchParams.get('vehicle') || '';
+  const { customer } = useCustomer();
 
   const [form, setForm] = useState<FormData>({
     fullName: '',
@@ -67,6 +69,17 @@ export default function BookingForm() {
     returnDate: '',
     message: '',
   });
+
+  // Auto-fill name/email from customer session
+  useEffect(() => {
+    if (customer) {
+      setForm((prev) => ({
+        ...prev,
+        fullName: prev.fullName || `${customer.firstName}`,
+        email: prev.email || customer.email,
+      }));
+    }
+  }, [customer]);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -111,10 +124,17 @@ export default function BookingForm() {
 
     try {
       const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3001';
+
+      // Build payload — include customerId if user is logged in
+      const payload: Record<string, unknown> = { ...form };
+      if (customer?.customerId) {
+        payload.customerId = customer.customerId;
+      }
+
       const res = await fetch(`${apiUrl}/api/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
         credentials: 'include',
       });
 
@@ -155,13 +175,24 @@ export default function BookingForm() {
           Thank you for choosing DriveEase. We&apos;ve received your booking request and will 
           contact you within 2 hours to confirm your reservation.
         </p>
-        <button
-          onClick={() => setStatus('idle')}
-          className="px-6 py-3 gold-gradient text-white font-semibold rounded-xl hover:opacity-90 transition-all"
-          id="book-another-btn"
-        >
-          Make Another Booking
-        </button>
+        {customer && (
+          <a
+            href="/account"
+            className="inline-flex items-center gap-2 px-5 py-2.5 mb-4 glass border border-amber-500/30 text-amber-400 text-sm font-medium rounded-xl hover:bg-amber-500/10 transition-all"
+          >
+            <LogIn className="w-4 h-4" />
+            View in My Dashboard
+          </a>
+        )}
+        <div>
+          <button
+            onClick={() => setStatus('idle')}
+            className="px-6 py-3 gold-gradient text-white font-semibold rounded-xl hover:opacity-90 transition-all"
+            id="book-another-btn"
+          >
+            Make Another Booking
+          </button>
+        </div>
       </div>
     );
   }
