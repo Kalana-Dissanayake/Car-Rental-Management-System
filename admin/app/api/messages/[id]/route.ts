@@ -35,6 +35,45 @@ async function getHandler(
   }
 }
 
+// ─── PATCH /api/messages/[id] — update status (Protected) ────────────────
+async function patchHandler(
+  req: NextRequest,
+  _user: JWTPayload,
+  context?: { params: Promise<Record<string, string>> }
+) {
+  try {
+    const params = await context?.params;
+    const id = params?.id;
+
+    if (!id || !isValidObjectId(id)) {
+      return NextResponse.json({ error: 'Invalid message ID' }, { status: 400 });
+    }
+
+    const body = await req.json();
+    const { status } = body;
+
+    if (!['new', 'read', 'resolved'].includes(status)) {
+      return NextResponse.json({ error: 'Invalid status value' }, { status: 400 });
+    }
+
+    await connectDB();
+    const updated = await ContactMessage.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    ).lean();
+
+    if (!updated) {
+      return NextResponse.json({ error: 'Message not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, data: updated });
+  } catch (error) {
+    console.error('[PATCH MESSAGE ERROR]', error);
+    return NextResponse.json({ error: 'Failed to update status' }, { status: 500 });
+  }
+}
+
 // ─── DELETE /api/messages/[id] (Protected) ────────────────────────────────
 async function deleteHandler(
   _req: NextRequest,
@@ -66,5 +105,6 @@ async function deleteHandler(
   }
 }
 
-export const GET = withAuth(getHandler);
+export const GET    = withAuth(getHandler);
+export const PATCH  = withAuth(patchHandler);
 export const DELETE = withAuth(deleteHandler);

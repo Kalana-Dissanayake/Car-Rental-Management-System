@@ -2,16 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Car, LayoutDashboard, MessageSquare, LogOut } from 'lucide-react';
+import { Car, LayoutDashboard, BookOpen, CalendarDays, Download, LogOut } from 'lucide-react';
 
 const navItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Bookings', href: '/dashboard', icon: MessageSquare },
+  { label: 'Dashboard', href: '/dashboard',          icon: LayoutDashboard },
+  { label: 'Bookings',  href: '/dashboard/bookings', icon: BookOpen },
+  { label: 'Calendar',  href: '/dashboard/calendar', icon: CalendarDays },
+  { label: 'Exports',   href: '/dashboard/exports',  icon: Download },
 ];
 
-interface SidebarProps {
-  userEmail: string;
-}
+interface SidebarProps { userEmail: string; }
 
 export default function Sidebar({ userEmail }: SidebarProps) {
   const pathname = usePathname();
@@ -22,9 +22,9 @@ export default function Sidebar({ userEmail }: SidebarProps) {
   }
 
   return (
-    <aside className="w-64 flex-shrink-0 flex flex-col glass border-r border-gray-800/50">
+    <aside className="w-60 flex-shrink-0 flex flex-col glass border-r border-gray-800/50">
       {/* Logo */}
-      <div className="p-6 border-b border-gray-800/50">
+      <div className="p-5 border-b border-gray-800/50">
         <Link href="/dashboard" className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center shadow-lg shadow-amber-500/20">
             <Car className="w-5 h-5 text-white" />
@@ -37,9 +37,15 @@ export default function Sidebar({ userEmail }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-3 space-y-0.5">
+        <p className="text-gray-600 text-[10px] font-semibold uppercase tracking-widest px-3 pt-2 pb-1.5">
+          Menu
+        </p>
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          // Exact match for Dashboard, prefix match for sub-pages
+          const isActive = item.href === '/dashboard'
+            ? pathname === '/dashboard'
+            : pathname.startsWith(item.href);
           return (
             <Link
               key={item.label}
@@ -50,17 +56,18 @@ export default function Sidebar({ userEmail }: SidebarProps) {
                   : 'text-gray-400 hover:text-white hover:bg-gray-800/60'
               }`}
             >
-              <item.icon className="w-4 h-4" />
+              <item.icon className="w-4 h-4 flex-shrink-0" />
               {item.label}
+              {/* New badge — shown on Bookings when relevant */}
             </Link>
           );
         })}
       </nav>
 
       {/* User + Logout */}
-      <div className="p-4 border-t border-gray-800/50">
-        <div className="flex items-center gap-3 px-3 py-2 mb-2">
-          <div className="w-8 h-8 rounded-full brand-gradient flex items-center justify-center text-white text-xs font-bold">
+      <div className="p-3 border-t border-gray-800/50">
+        <div className="flex items-center gap-3 px-3 py-2 mb-1">
+          <div className="w-8 h-8 rounded-full brand-gradient flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
             {userEmail.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
