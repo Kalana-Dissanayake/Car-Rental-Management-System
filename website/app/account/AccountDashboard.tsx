@@ -28,8 +28,8 @@ const VEHICLE_LABELS: Record<string, string> = {
 };
 
 const STATUS_CONFIG = {
-  new:      { label: 'Pending',   cls: 'bg-amber-500/15 text-amber-400 border-amber-500/25' },
-  read:     { label: 'Confirmed', cls: 'bg-blue-500/15 text-blue-400 border-blue-500/25' },
+  new: { label: 'Pending', cls: 'bg-amber-500/15 text-amber-400 border-amber-500/25' },
+  read: { label: 'Confirmed', cls: 'bg-blue-500/15 text-blue-400 border-blue-500/25' },
   resolved: { label: 'Completed', cls: 'bg-green-500/15 text-green-400 border-green-500/25' },
 };
 
@@ -115,8 +115,20 @@ export default function AccountDashboard({ customer }: Props) {
   }
 
   return (
-    <div className="min-h-screen px-4 py-24">
-      <div className="max-w-5xl mx-auto space-y-8 animate-fade-up">
+    <div
+      className="min-h-screen px-4 py-24 relative"
+      style={{
+        backgroundImage: "url('/images/User-dashboard-background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-[#0a0a0f]/75 pointer-events-none" />
+
+      {/* Content — sits above the overlay */}
+      <div className="relative z-10 max-w-5xl mx-auto space-y-8 animate-fade-up">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
