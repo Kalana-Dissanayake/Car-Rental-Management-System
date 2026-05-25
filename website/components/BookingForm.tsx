@@ -76,6 +76,8 @@ export default function BookingForm() {
   useEffect(() => {
     if (preselectedVehicle) {
       setForm((prev) => ({ ...prev, vehicleType: preselectedVehicle }));
+      // Sync CarPreview with the pre-selected vehicle
+      window.dispatchEvent(new CustomEvent('driveease:vehicleChange', { detail: preselectedVehicle }));
     }
   }, [preselectedVehicle]);
 
@@ -87,6 +89,10 @@ export default function BookingForm() {
     // Clear field error on change
     if (errors[name as keyof FormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+    // Notify CarPreview sidebar of vehicle type change
+    if (name === 'vehicleType') {
+      window.dispatchEvent(new CustomEvent('driveease:vehicleChange', { detail: value }));
     }
   }
 

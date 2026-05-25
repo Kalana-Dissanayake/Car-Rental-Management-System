@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Eye, EyeOff, Lock, Mail, Car } from 'lucide-react';
 
 export default function LoginPage() {
@@ -42,24 +43,39 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      {/* Ambient glow */}
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+      {/* Full-screen background image */}
+      <Image
+        src="/images/admin background.jpg"
+        alt="Luxury car background"
+        fill
+        className="object-cover object-center"
+        priority
+        quality={85}
+      />
+
+      {/* Dark gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950/90 via-gray-900/80 to-gray-950/90" />
+
+      {/* Amber ambient glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-amber-600/5 rounded-full blur-2xl" />
       </div>
 
-      <div className="w-full max-w-md animate-fade-in">
+      {/* Card */}
+      <div className="relative w-full max-w-md animate-fade-in z-10">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl brand-gradient mb-4 shadow-lg shadow-amber-500/20">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl brand-gradient mb-4 shadow-lg shadow-amber-500/30">
             <Car className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">DriveEase Admin</h1>
           <p className="text-gray-400 text-sm mt-1">Sign in to manage your fleet</p>
         </div>
 
-        {/* Card */}
-        <div className="glass rounded-2xl p-8">
+        {/* Glass card */}
+        <div className="glass rounded-2xl p-8 border border-white/10 shadow-2xl backdrop-blur-xl">
           <form onSubmit={handleSubmit} className="space-y-5" id="admin-login-form">
             {/* Email */}
             <div>
@@ -76,7 +92,7 @@ export default function LoginPage() {
                   required
                   autoComplete="email"
                   placeholder="admin@carrental.com"
-                  className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-900/70 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
                 />
               </div>
             </div>
@@ -96,7 +112,7 @@ export default function LoginPage() {
                   required
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-12 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                  className="w-full pl-10 pr-12 py-3 bg-gray-900/70 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
                 />
                 <button
                   type="button"
@@ -124,7 +140,7 @@ export default function LoginPage() {
               id="login-submit-btn"
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 brand-gradient text-white font-semibold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 brand-gradient text-white font-semibold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-amber-500/30 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>

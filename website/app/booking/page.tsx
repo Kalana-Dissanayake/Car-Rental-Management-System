@@ -1,15 +1,23 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import BookingForm from '@/components/BookingForm';
+import CarPreview from '@/components/CarPreview';
 import { Shield, Clock, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Book a Car',
   description:
-    'Book your perfect rental vehicle with DriveEase. Quick, easy, and secure. Choose your dates, vehicle type, and we\'ll take care of the rest.',
+    "Book your perfect rental vehicle with DriveEase. Quick, easy, and secure. Choose your dates, vehicle type, and we'll take care of the rest.",
 };
 
-export default function BookingPage() {
+interface BookingPageProps {
+  searchParams: Promise<{ vehicle?: string }>;
+}
+
+export default async function BookingPage({ searchParams }: BookingPageProps) {
+  const params = await searchParams;
+  const initialVehicle = params.vehicle || '';
+
   return (
     <>
       {/* ── Page Header ──────────────────────────────────── */}
@@ -21,7 +29,7 @@ export default function BookingPage() {
           </p>
           <h1 className="text-5xl font-bold text-white mb-4">Book Your Vehicle</h1>
           <p className="text-slate-400 max-w-lg mx-auto">
-            Fill in your details and we&apos;ll confirm your reservation within 2 hours. 
+            Fill in your details and we&apos;ll confirm your reservation within 2 hours.{' '}
             No payment required upfront.
           </p>
         </div>
@@ -31,7 +39,8 @@ export default function BookingPage() {
       <section className="py-12 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            {/* Form */}
+
+            {/* ── Booking Form ── */}
             <div className="lg:col-span-2">
               <Suspense fallback={
                 <div className="glass rounded-3xl p-10 text-center">
@@ -42,8 +51,13 @@ export default function BookingPage() {
               </Suspense>
             </div>
 
-            {/* Sidebar Info */}
+            {/* ── Sidebar ── */}
             <div className="space-y-4">
+
+              {/* Dynamic car preview — initialVehicle pre-selects from URL param */}
+              <CarPreview initialVehicle={initialVehicle} />
+
+              {/* Why Book With Us */}
               <div className="glass rounded-2xl p-6">
                 <h3 className="font-semibold text-white mb-4">Why Book With Us?</h3>
                 <ul className="space-y-3">
@@ -62,6 +76,7 @@ export default function BookingPage() {
                 </ul>
               </div>
 
+              {/* Need Help */}
               <div className="glass rounded-2xl p-6">
                 <h3 className="font-semibold text-white mb-3">Need Help?</h3>
                 <p className="text-slate-500 text-sm mb-4">
@@ -73,15 +88,17 @@ export default function BookingPage() {
                 </div>
               </div>
 
+              {/* Security note */}
               <div className="glass rounded-2xl p-6 border border-amber-500/10">
                 <p className="text-amber-400 text-xs uppercase tracking-wider font-medium mb-2">
                   🔒 Secure Submission
                 </p>
                 <p className="text-slate-500 text-xs leading-relaxed">
-                  Your data is protected. We use industry-standard encryption and never 
+                  Your data is protected. We use industry-standard encryption and never{' '}
                   share your information with third parties.
                 </p>
               </div>
+
             </div>
           </div>
         </div>

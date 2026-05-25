@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Shield, Clock, MapPin, Star, ChevronRight, Car, Zap, Award
 } from 'lucide-react';
@@ -49,9 +50,27 @@ const stats = [
 ];
 
 const fleet = [
-  { name: 'Economy', price: '$29', desc: 'Perfect for city commutes', emoji: '🚗' },
-  { name: 'SUV', price: '$79', desc: 'Ideal for family adventures', emoji: '🚙' },
-  { name: 'Luxury', price: '$149', desc: 'Ultimate driving experience', emoji: '🏎️' },
+  {
+    name: 'Economy',
+    price: '$29',
+    desc: 'Perfect for city commutes',
+    image: '/images/Toyota Yaris.jpg',
+    vehicle: 'economy',
+  },
+  {
+    name: 'SUV',
+    price: '$79',
+    desc: 'Ideal for family adventures',
+    image: '/images/Ford Explorer.jpg',
+    vehicle: 'suv',
+  },
+  {
+    name: 'Luxury',
+    price: '$149',
+    desc: 'Ultimate driving experience',
+    image: '/images/BMW 5 Series.jpg',
+    vehicle: 'luxury',
+  },
 ];
 
 const testimonials = [
@@ -63,7 +82,7 @@ const testimonials = [
   {
     name: 'James T.',
     rating: 5,
-    text: 'Best car rental service I\'ve ever used. Transparent pricing, no hidden fees, and a gorgeous vehicle.',
+    text: "Best car rental service I've ever used. Transparent pricing, no hidden fees, and a gorgeous vehicle.",
   },
   {
     name: 'Emily R.',
@@ -77,13 +96,26 @@ export default function HomePage() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 hero-glow" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(245,158,11,0.08),rgba(255,255,255,0))]" />
+        {/* Background photo */}
+        <Image
+          src="/images/background.jpg"
+          alt="Premium rental car on the road"
+          fill
+          className="object-cover object-center"
+          priority
+          quality={90}
+        />
+
+        {/* Layered dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-slate-950/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+
+        {/* Amber glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_30%_50%,rgba(245,158,11,0.06),rgba(255,255,255,0))]" />
 
         {/* Grid lines */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
               'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
@@ -108,7 +140,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-xl text-slate-400 leading-relaxed mb-10 max-w-xl animate-fade-up-delay-2">
-              Choose from 200+ premium vehicles. Transparent pricing, no hidden fees, 
+              Choose from 200+ premium vehicles. Transparent pricing, no hidden fees,{' '}
               and 24/7 support — because every journey deserves excellence.
             </p>
 
@@ -161,7 +193,7 @@ export default function HomePage() {
               The Smarter Way to Rent
             </h2>
             <p className="text-slate-400 max-w-lg mx-auto">
-              We've reimagined car rental from the ground up, putting your experience and safety first.
+              We&apos;ve reimagined car rental from the ground up, putting your experience and safety first.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -192,19 +224,37 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {fleet.map((car) => (
-              <div key={car.name} className="glass rounded-2xl p-8 text-center card-hover group">
-                <div className="text-6xl mb-4">{car.emoji}</div>
-                <h3 className="text-xl font-bold text-white mb-1">{car.name}</h3>
-                <p className="text-slate-500 text-sm mb-4">{car.desc}</p>
-                <p className="text-amber-400 font-bold text-lg mb-6">
-                  From {car.price}<span className="text-slate-500 font-normal text-sm">/day</span>
-                </p>
-                <Link
-                  href="/booking"
-                  className="inline-block w-full py-3 glass border border-amber-500/20 text-amber-400 rounded-xl text-sm font-medium hover:bg-amber-500/10 transition-colors"
-                >
-                  Book This Category
-                </Link>
+              <div key={car.name} className="glass rounded-2xl overflow-hidden card-hover group">
+                {/* Car image */}
+                <div className="relative h-52 overflow-hidden">
+                  <Image
+                    src={car.image}
+                    alt={`${car.name} category vehicle`}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+                  <div className="absolute top-3 left-3">
+                    <span className="px-3 py-1 glass text-xs text-amber-400 border border-amber-500/20 rounded-full font-medium">
+                      {car.name}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card body */}
+                <div className="p-6 text-center">
+                  <p className="text-slate-400 text-sm mb-3">{car.desc}</p>
+                  <p className="text-amber-400 font-bold text-xl mb-5">
+                    From {car.price}<span className="text-slate-500 font-normal text-sm">/day</span>
+                  </p>
+                  <Link
+                    href={`/booking?vehicle=${car.vehicle}`}
+                    className="inline-block w-full py-3 glass border border-amber-500/20 text-amber-400 rounded-xl text-sm font-medium hover:bg-amber-500/10 transition-colors"
+                  >
+                    Book This Category
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
