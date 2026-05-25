@@ -17,10 +17,11 @@ interface DashboardChartsProps {
 
 // ── Shared tooltip style ──────────────────────────────────────────────────────
 const tooltipStyle = {
-  backgroundColor: '#111827',
-  border: '1px solid rgba(255,255,255,0.08)',
+  backgroundColor: '#ffffff',
+  border: '1px solid #e5e7eb',
   borderRadius: '12px',
-  color: '#f1f5f9',
+  color: '#111827',
+  boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
   fontSize: '12px',
 };
 
@@ -52,7 +53,7 @@ export default function DashboardCharts({
       {/* ── Area Chart — Booking Volume Trends ─────────────────────────── */}
       <div className="xl:col-span-2 glass rounded-2xl p-5">
         <div className="mb-5">
-          <h2 className="text-sm font-semibold text-white">Booking Volume Trends</h2>
+          <h2 className="text-sm font-semibold text-gray-900">Booking Volume Trends</h2>
           <p className="text-gray-500 text-xs mt-0.5">Daily bookings received — last 30 days</p>
         </div>
         <ResponsiveContainer width="100%" height={220}>
@@ -63,18 +64,18 @@ export default function DashboardCharts({
                 <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
             <XAxis
               dataKey="date"
               tickFormatter={fmtDate}
-              tick={{ fill: '#6b7280', fontSize: 10 }}
+              tick={{ fill: '#94a3b8', fontSize: 10 }}
               interval={4}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
               allowDecimals={false}
-              tick={{ fill: '#6b7280', fontSize: 10 }}
+              tick={{ fill: '#94a3b8', fontSize: 10 }}
               axisLine={false}
               tickLine={false}
             />
@@ -102,7 +103,7 @@ export default function DashboardCharts({
       {/* ── Donut Chart — Inquiry Resolution Funnel ─────────────────────── */}
       <div className="glass rounded-2xl p-5">
         <div className="mb-4">
-          <h2 className="text-sm font-semibold text-white">Resolution Funnel</h2>
+          <h2 className="text-sm font-semibold text-gray-900">Resolution Funnel</h2>
           <p className="text-gray-500 text-xs mt-0.5">Inquiry status distribution</p>
         </div>
         <ResponsiveContainer width="100%" height={180}>
@@ -122,7 +123,7 @@ export default function DashboardCharts({
               ))}
             </Pie>
             {/* Center label */}
-            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="#f1f5f9">
+            <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="#111827">
               <tspan x="50%" dy="-6" fontSize="20" fontWeight="700">{totalInquiries}</tspan>
               <tspan x="50%" dy="20" fontSize="10" fill="#6b7280">Total</tspan>
             </text>
@@ -137,9 +138,9 @@ export default function DashboardCharts({
             <div key={s.name} className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: s.color }} />
-                <span className="text-gray-400">{s.name}</span>
+                <span className="text-gray-500">{s.name}</span>
               </div>
-              <span className="text-white font-semibold">{s.value}</span>
+              <span className="text-gray-900 font-semibold">{s.value}</span>
             </div>
           ))}
         </div>
@@ -148,7 +149,7 @@ export default function DashboardCharts({
       {/* ── Horizontal Bar Chart — Demand by Vehicle Type ──────────────── */}
       <div className="xl:col-span-3 glass rounded-2xl p-5">
         <div className="mb-5">
-          <h2 className="text-sm font-semibold text-white">Demand by Vehicle Type</h2>
+          <h2 className="text-sm font-semibold text-gray-900">Demand by Vehicle Type</h2>
           <p className="text-gray-500 text-xs mt-0.5">Total booking requests per vehicle category</p>
         </div>
         <ResponsiveContainer width="100%" height={Math.max(180, demandByType.length * 44)}>
@@ -157,18 +158,18 @@ export default function DashboardCharts({
             layout="vertical"
             margin={{ top: 0, right: 20, left: 60, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" horizontal={false} />
             <XAxis
               type="number"
               allowDecimals={false}
-              tick={{ fill: '#6b7280', fontSize: 10 }}
+              tick={{ fill: '#94a3b8', fontSize: 10 }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
               type="category"
               dataKey="type"
-              tick={{ fill: '#d1d5db', fontSize: 11 }}
+              tick={{ fill: '#64748b', fontSize: 11 }}
               axisLine={false}
               tickLine={false}
               width={56}

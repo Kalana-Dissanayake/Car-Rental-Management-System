@@ -2,13 +2,18 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Car, LayoutDashboard, BookOpen, CalendarDays, Download, LogOut } from 'lucide-react';
+import { Car, LayoutDashboard, BookOpen, CalendarDays, Download, LogOut, Settings, HelpCircle } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard',          icon: LayoutDashboard },
   { label: 'Bookings',  href: '/dashboard/bookings', icon: BookOpen },
   { label: 'Calendar',  href: '/dashboard/calendar', icon: CalendarDays },
   { label: 'Exports',   href: '/dashboard/exports',  icon: Download },
+];
+
+const systemItems = [
+  { label: 'Settings', href: '/dashboard/settings', icon: Settings },
+  { label: 'Help',     href: '/dashboard/help',     icon: HelpCircle },
 ];
 
 interface SidebarProps { userEmail: string; }
@@ -22,7 +27,7 @@ export default function Sidebar({ userEmail }: SidebarProps) {
   }
 
   return (
-    <aside className="w-60 flex-shrink-0 flex flex-col glass border-r border-gray-800/50">
+    <aside className="w-60 flex-shrink-0 flex flex-col bg-[#1a1a2e] border-r border-gray-800 z-20">
       {/* Logo */}
       <div className="p-5 border-b border-gray-800/50">
         <Link href="/dashboard" className="flex items-center gap-3">
@@ -59,6 +64,27 @@ export default function Sidebar({ userEmail }: SidebarProps) {
               <item.icon className="w-4 h-4 flex-shrink-0" />
               {item.label}
               {/* New badge — shown on Bookings when relevant */}
+            </Link>
+          );
+        })}
+
+        <p className="text-gray-600 text-[10px] font-semibold uppercase tracking-widest px-3 pt-4 pb-1.5 border-t border-gray-800/50 mt-2">
+          System
+        </p>
+        {systemItems.map((item) => {
+          const isActive = pathname.startsWith(item.href);
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800/60'
+              }`}
+            >
+              <item.icon className="w-4 h-4 flex-shrink-0" />
+              {item.label}
             </Link>
           );
         })}

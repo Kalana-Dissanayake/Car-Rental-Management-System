@@ -3,7 +3,7 @@ import ContactMessage from '@/models/ContactMessage';
 import DashboardCharts from '@/components/DashboardCharts';
 import {
   MessageSquare, AlertCircle, Clock, TrendingUp,
-  BookOpen, CalendarDays, Download,
+  Car, Mail, Calendar, ArrowRight,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -34,10 +34,8 @@ async function getDashboardData() {
     const returnD = new Date(b.returnDate);
     const diff = (returnD.getTime() - pickup.getTime()) / (1000 * 60 * 60 * 24);
     if (!isNaN(diff) && diff > 0) { totalDays += diff; validCount++; }
-
     const vt = b.vehicleType || 'unknown';
     vehicleTypeMap[vt] = (vehicleTypeMap[vt] || 0) + 1;
-
     const dateKey = new Date(b.createdAt).toISOString().split('T')[0];
     dateCountMap[dateKey] = (dateCountMap[dateKey] || 0) + 1;
   }
@@ -71,14 +69,23 @@ async function getDashboardData() {
     { name: 'Resolved', value: resolved,  color: '#22c55e' },
   ];
 
-  return { total, newCount, avgDuration, topCategory, demandByType, trendData, statusBreakdown };
+  // Recent bookings (last 8)
+  const recentBookings = await ContactMessage.find({})
+    .sort({ createdAt: -1 })
+    .limit(8)
+    .lean();
+
+  return {
+    total, newCount, avgDuration, topCategory,
+    demandByType, trendData, statusBreakdown,
+    recentBookings: JSON.parse(JSON.stringify(recentBookings)),
+    vehicleLabels,
+  };
 }
 
-// ── KPI card helper ───────────────────────────────────────────────────────────
+// ── KPI card ─────────────────────────────────────────────────────────────────
 
-function KpiCard({
-  label, value, sub, icon: Icon, accent, border,
-}: {
+function KpiCard({ label, value, sub, icon: Icon, accent, border }: {
   label: string; value: string | number; sub?: string;
   icon: React.ElementType; accent: string; border: string;
 }) {
@@ -90,32 +97,17 @@ function KpiCard({
           <Icon className="w-4 h-4" />
         </div>
       </div>
-      <p className="text-3xl font-bold text-white leading-none mb-1">{value}</p>
+      <p className="text-3xl font-bold text-gray-900 leading-none mb-1">{value}</p>
       {sub && <p className="text-gray-500 text-xs mt-1">{sub}</p>}
     </div>
   );
 }
 
-// ── Quick-action link card ────────────────────────────────────────────────────
-
-function QuickLink({ href, icon: Icon, label, desc, color }: {
-  href: string; icon: React.ElementType; label: string; desc: string; color: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="glass rounded-xl p-4 flex items-center gap-4 hover:border-amber-500/20 hover:bg-amber-500/5 transition-all group"
-    >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
-        <Icon className="w-5 h-5" />
-      </div>
-      <div>
-        <p className="text-white text-sm font-semibold group-hover:text-amber-400 transition-colors">{label}</p>
-        <p className="text-gray-500 text-xs">{desc}</p>
-      </div>
-    </Link>
-  );
-}
+const STATUS_CONFIG = {
+  new:      { label: 'New',      cls: 'bg-amber-50 text-amber-600 border-amber-200' },
+  read:     { label: 'Read',     cls: 'bg-blue-50 text-blue-600 border-blue-200' },
+  resolved: { label: 'Resolved', cls: 'bg-green-50 text-green-600 border-green-200' },
+};
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -163,15 +155,15 @@ export default async function DashboardPage() {
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-400 text-sm mt-1">
             {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
         {data.newCount > 0 && (
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 border border-amber-500/25 rounded-xl">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-amber-400 text-xs font-medium">{data.newCount} new requests</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <span className="text-amber-700 text-xs font-medium">{data.newCount} new requests</span>
           </div>
         )}
       </div>
@@ -190,32 +182,84 @@ export default async function DashboardPage() {
         statusBreakdown={data.statusBreakdown}
       />
 
-      {/* ── Quick Actions ───────────────────────────────────────────────── */}
-      <div>
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Quick Actions</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <QuickLink
+      {/* ── Recent Bookings ──────────────────────────────────────────────── */}
+      <div className="glass rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900">Recent Bookings</h2>
+            <p className="text-gray-500 text-xs mt-0.5">Latest 8 submissions</p>
+          </div>
+          <Link
             href="/dashboard/bookings"
-            icon={BookOpen}
-            label="Manage Bookings"
-            desc="Accept, resolve, or delete requests"
-            color="bg-amber-500/15 text-amber-400"
-          />
-          <QuickLink
-            href="/dashboard/calendar"
-            icon={CalendarDays}
-            label="Booking Calendar"
-            desc="View bookings by date"
-            color="bg-blue-500/15 text-blue-400"
-          />
-          <QuickLink
-            href="/dashboard/exports"
-            icon={Download}
-            label="Export Data"
-            desc="Download booking records as CSV"
-            color="bg-green-500/15 text-green-400"
-          />
+            className="flex items-center gap-1.5 text-xs text-amber-600 hover:text-amber-700 font-medium transition-colors"
+          >
+            View all <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
+
+        {data.recentBookings.length === 0 ? (
+          <div className="py-12 text-center">
+            <Car className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+            <p className="text-gray-500 text-sm">No bookings yet</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
+                  <th className="px-5 py-3 text-left font-medium">Customer</th>
+                  <th className="px-5 py-3 text-left font-medium">Vehicle</th>
+                  <th className="px-5 py-3 text-left font-medium hidden md:table-cell">Pickup</th>
+                  <th className="px-5 py-3 text-left font-medium">Status</th>
+                  <th className="px-5 py-3 text-left font-medium hidden lg:table-cell">Submitted</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {data.recentBookings.map((b: {
+                  _id: string; fullName: string; email: string;
+                  vehicleType: string; pickupDate: string; status: 'new' | 'read' | 'resolved'; createdAt: string;
+                }) => {
+                  const cfg = STATUS_CONFIG[b.status];
+                  return (
+                    <tr key={b._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-5 py-3.5">
+                        <p className="text-gray-900 font-medium text-sm">{b.fullName}</p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Mail className="w-3 h-3 text-gray-500" />
+                          <span className="text-gray-500 text-xs">{b.email}</span>
+                        </div>
+                      </td>
+                      <td className="px-5 py-3.5">
+                        <div className="flex items-center gap-1.5">
+                          <Car className="w-3.5 h-3.5 text-amber-500" />
+                          <span className="text-gray-700 text-sm">
+                            {data.vehicleLabels[b.vehicleType] || b.vehicleType}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-5 py-3.5 hidden md:table-cell">
+                        <div className="flex items-center gap-1.5 text-gray-500 text-xs">
+                          <Calendar className="w-3 h-3 text-green-500" />
+                          {new Date(b.pickupDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </div>
+                      </td>
+                      <td className="px-5 py-3.5">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${cfg.cls}`}>
+                          {cfg.label}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3.5 hidden lg:table-cell">
+                        <span className="text-gray-500 text-xs">
+                          {new Date(b.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
     </div>

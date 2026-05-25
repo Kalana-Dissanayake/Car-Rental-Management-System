@@ -22,9 +22,9 @@ const VEHICLE_LABELS: Record<string, string> = {
 };
 
 const STATUS_CONFIG = {
-  new:      { label: 'New',      cls: 'bg-amber-500/15 text-amber-400 border-amber-500/25' },
-  read:     { label: 'Read',     cls: 'bg-blue-500/15 text-blue-400 border-blue-500/25' },
-  resolved: { label: 'Resolved', cls: 'bg-green-500/15 text-green-400 border-green-500/25' },
+  new:      { label: 'New',      cls: 'bg-amber-50 text-amber-600 border-amber-200' },
+  read:     { label: 'Read',     cls: 'bg-blue-50 text-blue-600 border-blue-200' },
+  resolved: { label: 'Resolved', cls: 'bg-green-50 text-green-600 border-green-200' },
 };
 
 function escapeCSV(value: string) {
@@ -95,7 +95,7 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Export Data</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Export Data</h1>
           <p className="text-gray-400 text-sm mt-1">Filter bookings and download as a CSV file</p>
         </div>
         <button
@@ -120,7 +120,7 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
           { label: 'Resolved',       value: bookings.filter((b) => b.status === 'resolved').length },
         ].map((s) => (
           <div key={s.label} className="glass rounded-xl p-4 text-center">
-            <p className="text-2xl font-bold text-white">{s.value}</p>
+            <p className="text-2xl font-bold text-gray-900">{s.value}</p>
             <p className="text-gray-500 text-xs mt-0.5">{s.label}</p>
           </div>
         ))}
@@ -130,9 +130,9 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
       <div className="glass rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <Filter className="w-4 h-4 text-amber-400" />
-          <h2 className="text-sm font-semibold text-white">Filters</h2>
+          <h2 className="text-sm font-semibold text-gray-900">Filters</h2>
           {hasFilters && (
-            <button onClick={clearFilters} className="ml-auto flex items-center gap-1 text-xs text-gray-500 hover:text-white">
+            <button onClick={clearFilters} className="ml-auto flex items-center gap-1 text-xs text-gray-500 hover:text-gray-900">
               <X className="w-3 h-3" /> Clear
             </button>
           )}
@@ -147,15 +147,15 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
               placeholder="Name or email…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-gray-900/60 border border-gray-700/60 rounded-xl
-                text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 transition-colors"
+              className="w-full pl-9 pr-3 py-2 bg-white border border-gray-200 rounded-xl
+                text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-amber-500/50 transition-colors"
             />
           </div>
           {/* Status */}
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 bg-gray-900/60 border border-gray-700/60 rounded-xl text-sm text-white
+            className="px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-900
               focus:outline-none focus:border-amber-500/50 transition-colors cursor-pointer"
           >
             <option value="all">All Statuses</option>
@@ -167,7 +167,7 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
           <select
             value={filterVehicle}
             onChange={(e) => setFilterVehicle(e.target.value)}
-            className="px-3 py-2 bg-gray-900/60 border border-gray-700/60 rounded-xl text-sm text-white
+            className="px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-900
               focus:outline-none focus:border-amber-500/50 transition-colors cursor-pointer"
           >
             <option value="all">All Vehicles</option>
@@ -181,7 +181,7 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
             value={filterDateFrom}
             onChange={(e) => setFilterDateFrom(e.target.value)}
             placeholder="From date"
-            className="px-3 py-2 bg-gray-900/60 border border-gray-700/60 rounded-xl text-sm text-gray-300
+            className="px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-900
               focus:outline-none focus:border-amber-500/50 transition-colors cursor-pointer"
           />
           {/* Date to */}
@@ -190,7 +190,7 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
             value={filterDateTo}
             onChange={(e) => setFilterDateTo(e.target.value)}
             placeholder="To date"
-            className="px-3 py-2 bg-gray-900/60 border border-gray-700/60 rounded-xl text-sm text-gray-300
+            className="px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm text-gray-900
               focus:outline-none focus:border-amber-500/50 transition-colors cursor-pointer"
           />
         </div>
@@ -198,10 +198,10 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
 
       {/* Preview table */}
       <div className="glass rounded-2xl overflow-hidden">
-        <div className="px-5 py-3.5 border-b border-gray-800/50 flex items-center justify-between">
+        <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileText className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-semibold text-white">Preview — {filtered.length} rows</span>
+            <span className="text-sm font-semibold text-gray-900">Preview — {filtered.length} rows</span>
           </div>
           <span className="text-xs text-gray-600">Showing up to 50 rows</span>
         </div>
@@ -215,7 +215,7 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-800/50 text-gray-500 text-xs uppercase tracking-wider">
+                <tr className="border-b border-gray-100 text-gray-500 text-xs uppercase tracking-wider">
                   <th className="px-5 py-3 text-left">Name</th>
                   <th className="px-5 py-3 text-left">Email</th>
                   <th className="px-5 py-3 text-left">Vehicle</th>
@@ -226,25 +226,25 @@ export default function ExportsClient({ bookings }: { bookings: Booking[] }) {
                   <th className="px-5 py-3 text-left">Submitted</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800/40">
+              <tbody className="divide-y divide-gray-50">
                 {filtered.slice(0, 50).map((b) => {
                   const days = Math.round(
                     (new Date(b.returnDate).getTime() - new Date(b.pickupDate).getTime()) / 86400000
                   );
                   const cfg = STATUS_CONFIG[b.status];
                   return (
-                    <tr key={b._id} className="hover:bg-gray-800/20 transition-colors">
-                      <td className="px-5 py-3 text-white font-medium">{b.fullName}</td>
-                      <td className="px-5 py-3 text-gray-400 text-xs">{b.email}</td>
+                    <tr key={b._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-5 py-3 text-gray-900 font-medium">{b.fullName}</td>
+                      <td className="px-5 py-3 text-gray-500 text-xs">{b.email}</td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-1.5">
-                          <Car className="w-3.5 h-3.5 text-amber-400" />
-                          <span className="text-gray-300">{VEHICLE_LABELS[b.vehicleType] || b.vehicleType}</span>
+                          <Car className="w-3.5 h-3.5 text-amber-500" />
+                          <span className="text-gray-700">{VEHICLE_LABELS[b.vehicleType] || b.vehicleType}</span>
                         </div>
                       </td>
-                      <td className="px-5 py-3 text-gray-400 text-xs">{b.pickupDate}</td>
-                      <td className="px-5 py-3 text-gray-400 text-xs">{b.returnDate}</td>
-                      <td className="px-5 py-3 text-gray-400 text-xs">{days}d</td>
+                      <td className="px-5 py-3 text-gray-500 text-xs">{b.pickupDate}</td>
+                      <td className="px-5 py-3 text-gray-500 text-xs">{b.returnDate}</td>
+                      <td className="px-5 py-3 text-gray-500 text-xs">{days}d</td>
                       <td className="px-5 py-3">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${cfg.cls}`}>
                           {cfg.label}

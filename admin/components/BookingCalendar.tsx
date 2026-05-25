@@ -80,7 +80,7 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white">Booking Calendar</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Booking Calendar</h1>
         <p className="text-gray-400 text-sm mt-1">View which dates have active rental bookings</p>
       </div>
 
@@ -92,16 +92,16 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
           <div className="flex items-center justify-between mb-6">
             <button
               onClick={prevMonth}
-              className="p-2 hover:bg-gray-800 rounded-xl transition-colors text-gray-400 hover:text-white"
+              className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500 hover:text-gray-900"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <h2 className="text-white font-semibold text-lg">
+            <h2 className="text-gray-900 font-semibold text-lg">
               {MONTHS[viewMonth]} {viewYear}
             </h2>
             <button
               onClick={nextMonth}
-              className="p-2 hover:bg-gray-800 rounded-xl transition-colors text-gray-400 hover:text-white"
+              className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500 hover:text-gray-900"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -129,17 +129,17 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
                   key={key}
                   onClick={() => setSelected(isSelected ? null : key)}
                   className={`relative aspect-square rounded-xl flex flex-col items-center justify-center text-sm
-                    transition-all hover:bg-gray-800/60 ${
+                    transition-all hover:bg-gray-50 ${
                     isSelected
-                      ? 'bg-amber-500/20 border border-amber-500/50 text-amber-400'
+                      ? 'bg-amber-50 border border-amber-200 text-amber-700'
                       : isToday
-                        ? 'bg-amber-500/10 border border-amber-500/20 text-amber-300'
+                        ? 'bg-amber-50/50 border border-amber-100 text-amber-600'
                         : hasBookings
-                          ? 'bg-blue-500/10 border border-blue-500/15 text-white'
-                          : 'text-gray-400'
+                          ? 'bg-blue-50 border border-blue-100 text-blue-700'
+                          : 'text-gray-600'
                   }`}
                 >
-                  <span className={`font-medium ${isSelected || isToday ? '' : hasBookings ? 'text-white' : ''}`}>
+                  <span className={`font-medium ${isSelected || isToday ? '' : hasBookings ? 'text-blue-900' : ''}`}>
                     {day}
                   </span>
                   {hasBookings && (
@@ -158,7 +158,7 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
           </div>
 
           {/* Legend */}
-          <div className="flex items-center gap-5 mt-5 pt-4 border-t border-gray-800/50">
+          <div className="flex items-center gap-5 mt-5 pt-4 border-t border-gray-100">
             {[
               { dot: 'bg-amber-400', label: 'New' },
               { dot: 'bg-blue-400',  label: 'Read' },
@@ -182,7 +182,7 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
             <>
               <div className="flex items-center gap-2 mb-4">
                 <CalIcon className="w-4 h-4 text-amber-400" />
-                <h3 className="text-white font-semibold text-sm">
+                <h3 className="text-gray-900 font-semibold text-sm">
                   {new Date(selected + 'T00:00:00').toLocaleDateString('en-US', {
                     weekday: 'long', month: 'long', day: 'numeric',
                   })}
@@ -193,18 +193,18 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
               ) : (
                 <div className="space-y-3">
                   {selectedBookings.map((b) => (
-                    <div key={b._id} className="bg-gray-900/50 rounded-xl p-3.5 border border-gray-800/50">
+                    <div key={b._id} className="bg-gray-50 rounded-xl p-3.5 border border-gray-100">
                       <div className="flex items-center justify-between mb-2">
-                        <p className="text-white text-sm font-medium">{b.fullName}</p>
+                        <p className="text-gray-900 text-sm font-medium">{b.fullName}</p>
                         <span className={`w-2 h-2 rounded-full ${STATUS_DOT[b.status]}`} />
                       </div>
                       <div className="space-y-1">
                         <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                          <Car className="w-3 h-3 text-amber-400" />
+                          <Car className="w-3 h-3 text-amber-500" />
                           {VEHICLE_LABELS[b.vehicleType] || b.vehicleType}
                         </div>
                         <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                          <CalIcon className="w-3 h-3 text-green-400" />
+                          <CalIcon className="w-3 h-3 text-green-500" />
                           {new Date(b.pickupDate + 'T00:00:00').toLocaleDateString()} → {new Date(b.returnDate + 'T00:00:00').toLocaleDateString()}
                         </div>
                       </div>
@@ -215,11 +215,11 @@ export default function BookingCalendar({ bookings }: { bookings: Booking[] }) {
             </>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center py-12">
-              <div className="w-14 h-14 rounded-2xl bg-gray-800/60 flex items-center justify-center mx-auto mb-4">
-                <CalIcon className="w-7 h-7 text-gray-600" />
+              <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-4">
+                <CalIcon className="w-7 h-7 text-gray-400" />
               </div>
-              <p className="text-gray-400 text-sm font-medium">Select a date</p>
-              <p className="text-gray-600 text-xs mt-1">Click any highlighted date to see bookings</p>
+              <p className="text-gray-500 text-sm font-medium">Select a date</p>
+              <p className="text-gray-400 text-xs mt-1">Click any highlighted date to see bookings</p>
             </div>
           )}
         </div>
