@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -42,15 +43,27 @@ export default function ContactPage() {
   return (
     <>
       {/* ── Page Header ──────────────────────────────────── */}
-      <section className="pt-28 pb-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(245,158,11,0.07),transparent)]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+      <section className="relative min-h-[52vh] flex items-center justify-center overflow-hidden">
+        <Image
+          src="/images/Contact-Background.jpg"
+          alt="Contact DriveEase background"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/60 to-slate-950" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_60%,rgba(245,158,11,0.12),transparent)]" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-28 pb-16">
           <p className="text-amber-400 font-medium text-sm uppercase tracking-widest mb-3">
             Get In Touch
           </p>
-          <h1 className="text-5xl font-bold text-white mb-4">Contact DriveEase</h1>
-          <p className="text-slate-400 max-w-lg mx-auto">
-            Have a question or need assistance? Our team is available around the clock 
+          <h1 className="text-5xl lg:text-6xl font-bold text-white mb-5 drop-shadow-lg">
+            Contact DriveEase
+          </h1>
+          <p className="text-slate-300 max-w-lg mx-auto text-lg leading-relaxed">
+            Have a question or need assistance? Our team is available around the clock{' '}
             to help you with anything you need.
           </p>
         </div>
