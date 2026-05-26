@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const apiBase = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3001';
+  const apiBase = '';
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();

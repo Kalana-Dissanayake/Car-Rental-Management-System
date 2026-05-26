@@ -53,7 +53,7 @@ export default function AccountDashboard({ customer }: Props) {
   const [cancelLoading, setCancelLoading] = useState(false);
   const [cancelError, setCancelError] = useState('');
 
-  const apiBase = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3001';
+  const apiBase = '';
 
   const fetchBookings = useCallback(async () => {
     setFetchLoading(true);

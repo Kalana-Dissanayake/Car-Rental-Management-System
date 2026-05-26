@@ -123,7 +123,7 @@ export default function BookingForm() {
     setStatus('loading');
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3001';
+      const apiBase = '';
 
       // Build payload — include customerId if user is logged in
       const payload: Record<string, unknown> = { ...form };
@@ -131,7 +131,7 @@ export default function BookingForm() {
         payload.customerId = customer.customerId;
       }
 
-      const res = await fetch(`${apiUrl}/api/messages`, {
+      const res = await fetch(`${apiBase}/api/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

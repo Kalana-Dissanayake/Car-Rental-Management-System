@@ -46,7 +46,7 @@ export default function EditBookingModal({ booking, onClose, onSaved }: Props) {
   const [success, setSuccess] = useState(false);
   const backdropRef = useRef<HTMLDivElement>(null);
 
-  const apiBase = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3001';
+  const apiBase = '';
 
   // Close on Escape key
   useEffect(() => {
