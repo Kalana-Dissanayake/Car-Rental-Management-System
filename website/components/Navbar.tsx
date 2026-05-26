@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
 import { Car, Menu, X, User, LogOut, ChevronDown, LayoutDashboard } from 'lucide-react';
@@ -56,9 +57,7 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group" id="navbar-logo">
-          <div className="w-8 h-8 rounded-lg gold-gradient flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/40 transition-shadow">
-            <Car className="w-4 h-4 text-white" />
-          </div>
+          <Image src="/images/Logo.png" alt="DriveEase Logo" width={180} height={56} className="h-14 w-auto object-contain" priority />
           <span className="font-bold text-white text-lg">
             Drive<span className="text-gold">Ease</span>
           </span>

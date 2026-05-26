@@ -66,11 +66,9 @@ export default function LoginPage() {
       {/* Card */}
       <div className="relative w-full max-w-md animate-fade-in z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl brand-gradient mb-4 shadow-lg shadow-amber-500/30">
-            <Car className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-white">DriveEase Admin</h1>
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Image src="/images/Logo.png" alt="DriveEase Logo" width={240} height={80} className="h-20 w-auto object-contain mb-4" priority />
+          <h1 className="text-3xl font-bold text-white">DriveEase Admin</h1>
           <p className="text-gray-400 text-sm mt-1">Sign in to manage your fleet</p>
         </div>
 
@@ -79,7 +77,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-5" id="admin-login-form">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-sm font-bold text-black mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -92,14 +90,14 @@ export default function LoginPage() {
                   required
                   autoComplete="email"
                   placeholder="admin@carrental.com"
-                  className="w-full pl-10 pr-4 py-3 bg-gray-900/70 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-black font-bold placeholder-gray-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500 transition-all"
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-bold text-black mb-2">
                 Password
               </label>
               <div className="relative">
@@ -112,12 +110,12 @@ export default function LoginPage() {
                   required
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-12 py-3 bg-gray-900/70 border border-gray-700 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                  className="w-full pl-10 pr-12 py-3 bg-white border border-gray-300 rounded-xl text-black font-bold placeholder-gray-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition-colors"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Fragment } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Trash2, CheckCircle, Eye, Search, Filter,
@@ -174,7 +174,7 @@ export default function BookingsManager({ initialMessages }: { initialMessages: 
                     / 86400000
                   );
                   return (
-                    <>
+                    <Fragment key={msg._id}>
                       <tr key={msg._id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-5 py-4">
                           <p className="font-medium text-gray-900">{msg.fullName}</p>
@@ -288,7 +288,7 @@ export default function BookingsManager({ initialMessages }: { initialMessages: 
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   );
                 })}
               </tbody>

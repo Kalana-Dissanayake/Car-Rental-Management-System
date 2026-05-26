@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Car, MapPin, Phone, Mail, Share2, MessageCircle, Globe } from 'lucide-react';
 
 export default function Footer() {
@@ -8,14 +9,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg gold-gradient flex items-center justify-center">
-                <Car className="w-4 h-4 text-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 mb-4">
+              <Image src="/images/Logo.png" alt="DriveEase Logo" width={180} height={56} className="h-14 w-auto object-contain" />
               <span className="font-bold text-white text-lg">
                 Drive<span className="text-gold">Ease</span>
               </span>
-            </div>
+            </Link>
             <p className="text-slate-500 text-sm leading-relaxed">
               Premium car rental solutions for every journey. From economy to luxury, 
               we have the perfect vehicle for you.
