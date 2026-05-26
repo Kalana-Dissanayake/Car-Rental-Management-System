@@ -46,7 +46,7 @@ export function setCustomerAuthCookie(response: NextResponse, token: string): vo
   response.cookies.set(CUSTOMER_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax', // lax allows cross-site GET navigations (for redirect flows)
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none is required for cross-domain auth on Vercel
     maxAge: MAX_AGE,
     path: '/',
   });
@@ -59,7 +59,7 @@ export function clearCustomerAuthCookie(response: NextResponse): void {
   response.cookies.set(CUSTOMER_COOKIE_NAME, '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 0,
     path: '/',
   });
